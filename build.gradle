@@ -1,0 +1,57 @@
+plugins {
+    id "java"
+    id("io.micronaut.application") version "3.2.0"
+    id "org.springframework.boot" version "2.6.3"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE" //Conflict with micronaut
+//    id "net.ltgt.apt" version "0.19"
+    id("com.github.johnrengelman.shadow") version "7.1.1"
+}
+
+version = "0.1"
+group = "com.example"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+
+//    implementation(group: 'com.copado.tango', name: 'database-connector', version: '200') //Includes Foo spring bean
+
+//    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    annotationProcessor "io.micronaut.spring:micronaut-spring-annotation"
+
+//    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation "io.micronaut:micronaut-inject"
+
+
+    implementation("org.springframework.boot:spring-boot-starter")
+
+    runtimeOnly("ch.qos.logback:logback-classic")
+}
+
+
+application {
+    mainClass.set("com.example.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("14")
+    targetCompatibility = JavaVersion.toVersion("14")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.example.*")
+    }
+}
+
+
